@@ -147,7 +147,7 @@ export default function RegisterPage() {
                 />
               </div>
             </CardContent>
-            <CardFooter className="flex flex-col gap-4">
+            <CardFooter className="flex flex-col gap-4 mt-8">
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (
                   <>
