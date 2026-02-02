@@ -173,8 +173,76 @@ export function DashboardContent({ user }: DashboardContentProps) {
 
   return (
     <div className="min-h-screen bg-background">
+      <style>{`
+        @keyframes fadeInDown {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes slideInLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes scaleIn {
+          from {
+            opacity: 0;
+            transform: scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        
+        .animate-fadeInDown {
+          animation: fadeInDown 0.5s ease-out;
+        }
+        
+        .animate-fadeInUp {
+          animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .animate-slideInLeft {
+          animation: slideInLeft 0.6s ease-out;
+        }
+        
+        .animate-scaleIn {
+          animation: scaleIn 0.5s ease-out;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+      `}</style>
+      
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-card border-b border-border shadow-sm">
+      <header className="sticky top-0 z-50 bg-card border-b border-border shadow-sm animate-fadeInDown">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <HeartPulse className="h-8 w-8 text-primary" />
@@ -201,7 +269,7 @@ export function DashboardContent({ user }: DashboardContentProps) {
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-8">
         {/* Welcome Section */}
-        <div className="mb-8">
+        <div className="mb-8 animate-fadeInUp delay-100">
           <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2 text-balance">
             Selamat Datang, {user.fullName}!
           </h1>
@@ -211,7 +279,7 @@ export function DashboardContent({ user }: DashboardContentProps) {
         </div>
 
         {/* Progress Card */}
-        <Card className="mb-8 border-border">
+        <Card className="mb-8 border-border animate-fadeInUp delay-200 hover:shadow-md transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-lg text-card-foreground">Progres Belajar</CardTitle>
             <CardDescription>
@@ -230,10 +298,10 @@ export function DashboardContent({ user }: DashboardContentProps) {
 
         {/* Completion Message */}
         {progressPercentage === 100 && (
-          <Card className="mb-8 border-green-500 bg-green-500/5">
+          <Card className="mb-8 border-green-500 bg-green-500/5 animate-scaleIn delay-300">
             <CardContent className="p-6">
               <div className="text-center space-y-3">
-                <CheckCircle2 className="h-12 w-12 text-green-500 mx-auto" />
+                <CheckCircle2 className="h-12 w-12 text-green-500 mx-auto animate-bounce" />
                 <h2 className="text-2xl font-bold text-green-700">Selamat! 🎉</h2>
                 <p className="text-lg text-gray-700 leading-relaxed">
                   Terima kasih telah mengikuti edukasi ini.
@@ -249,13 +317,14 @@ export function DashboardContent({ user }: DashboardContentProps) {
 
         {/* Learning Stages */}
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-foreground mb-4">
+          <h2 className="text-xl font-semibold text-foreground mb-4 animate-fadeInUp delay-300">
             Tahap Pembelajaran
           </h2>
           {stages.map((stage, index) => (
             <Card
               key={stage.id}
-              className={getCardClasses(stage.status)}
+              className={`${getCardClasses(stage.status)} animate-fadeInUp transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1`}
+              style={{ animationDelay: `${0.3 + (index * 0.1)}s` }}
               onClick={() => handleStageClick(stage)}
               role={stage.status !== "locked" ? "button" : undefined}
               tabIndex={stage.status !== "locked" ? 0 : undefined}
@@ -268,7 +337,7 @@ export function DashboardContent({ user }: DashboardContentProps) {
               <CardContent className="p-4 md:p-6">
                 <div className="flex items-center gap-4">
                   <div
-                    className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center ${
+                    className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
                       stage.status === "completed"
                         ? "bg-primary/10 text-primary"
                         : stage.status === "available"
@@ -284,7 +353,7 @@ export function DashboardContent({ user }: DashboardContentProps) {
                         Tahap {index + 1}
                       </span>
                       {stage.status === "completed" && (
-                        <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                        <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full animate-fadeInUp">
                           Selesai
                         </span>
                       )}
@@ -294,7 +363,7 @@ export function DashboardContent({ user }: DashboardContentProps) {
                       {stage.description}
                     </p>
                   </div>
-                  <div className="flex-shrink-0">
+                  <div className="flex-shrink-0 transition-transform duration-300">
                     {getStatusIcon(stage.status)}
                   </div>
                 </div>
