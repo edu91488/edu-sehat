@@ -78,24 +78,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 px-4">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
-            Siap Memulai Perjalanan Sehat?
-          </h2>
-          <p className="text-muted-foreground mb-8">
-            Daftar sekarang dan mulai tingkatkan pengetahuan kesehatan Anda
-          </p>
-          <Button size="lg" asChild>
-            <Link href="/auth/register">
-              Daftar Gratis
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-      </section>
-
       {/* Footer */}
       <footer className="border-t border-border py-8 px-4">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
