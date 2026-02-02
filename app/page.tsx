@@ -35,7 +35,8 @@ export default function HomePage() {
             Tingkatkan Pengetahuan Kesehatan Anda
           </h1>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto text-pretty">
-            Pelajari gaya hidup sehat, nutrisi, dan kesehatan mental melalui modul 
+            Pelajari gaya hidup sehat dalam mempelajari Kepatuhan minum obat untuk
+mengontrol hipertensi melalui modul 
             pembelajaran interaktif yang dirancang khusus untuk Anda.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -61,18 +62,18 @@ export default function HomePage() {
           <div className="grid md:grid-cols-3 gap-6">
             <FeatureCard
               icon={<ClipboardCheck className="h-8 w-8" />}
-              title="Pre-Test & Post-Test"
-              description="Ukur kemampuan Anda sebelum dan sesudah pembelajaran untuk melihat perkembangan"
+              title="Pre-Test"
+              description="Ukur kemampuan Anda sebelum memulai modul pembelajaran"
             />
             <FeatureCard
               icon={<BookOpen className="h-8 w-8" />}
               title="3 Modul Edukasi"
-              description="Materi komprehensif tentang gaya hidup sehat, nutrisi, dan kesehatan mental"
+              description="Materi komprehensif tentang gaya hidup sehat mengenai kepatuhan minum obat "
             />
             <FeatureCard
               icon={<GraduationCap className="h-8 w-8" />}
-              title="Sertifikat Digital"
-              description="Dapatkan sertifikat setelah menyelesaikan semua modul pembelajaran"
+              title="Pos-Test"
+              description="Uji pemahaman Anda setelah menyelesaikan modul pembelajaran"
             />
           </div>
         </div>
