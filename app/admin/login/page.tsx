@@ -59,38 +59,8 @@ export default function AdminLoginPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4">
-      <div className="w-full max-w-md text-center">
-        {/* Maintenance Message */}
-        <div className="space-y-6">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <HeartPulse className="h-12 w-12 text-primary" />
-          </div>
-          
-          <div>
-            <h1 className="text-4xl font-bold text-foreground mb-2">
-              Website Sedang Maintenance
-            </h1>
-            <p className="text-lg text-muted-foreground mb-4">
-              Kami sedang melakukan pembaruan sistem. Silakan coba kembali nanti.
-            </p>
-          </div>
-          
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-            <p className="text-sm text-yellow-800">
-              ⏳ Perkiraan waktu selesai: Segera
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  /* 
-  // === LOGIN FORM CODE - COMMENTED OUT DURING MAINTENANCE ===
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        {/* Logo *//*}
+        {/* Logo */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-2">
             <HeartPulse className="h-8 w-8 text-primary" />
@@ -102,7 +72,7 @@ export default function AdminLoginPage() {
           </div>
         </div>
 
-        {/* Login Card *//*}
+        {/* Login Card */}
         <Card className="border-0 shadow-lg">
           <CardHeader className="text-center pb-3">
             <CardTitle className="text-2xl">Admin Login</CardTitle>
@@ -159,7 +129,7 @@ export default function AdminLoginPage() {
               </Button>
             </form>
 
-            {/* Demo Info *//*}
+            {/* Demo Info */}
             <div className="mt-6 p-3 bg-blue-50 rounded-lg border border-blue-200">
               <p className="text-xs text-blue-800 font-semibold mb-2">📝 Demo Credentials:</p>
               <p className="text-xs text-blue-700">
@@ -174,5 +144,4 @@ export default function AdminLoginPage() {
       </div>
     </div>
   );
-  */
 }
