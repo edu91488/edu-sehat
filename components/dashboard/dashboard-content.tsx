@@ -2,10 +2,13 @@
 
 import React from "react"
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { requestNotificationPermission, notifyUser } from "@/lib/notifications";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -52,10 +55,46 @@ export function DashboardContent({ user }: DashboardContentProps) {
   const supabase = createClient();
 
   // Progress dari database
+  const { toast } = useToast();
   const [completedStages, setCompletedStages] = useState<string[]>([]);
+  const [stageProgress, setStageProgress] = useState<Record<string, { completed: boolean; available_at?: string }>>({});
   const [isLoading, setIsLoading] = useState(true);
+  const timeoutsRef = useRef<number[]>([]);
+  const [notifPermission, setNotifPermission] = useState<NotificationPermission | 'unsupported'>('unsupported');
+  const [now, setNow] = useState<number>(Date.now());
 
   useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const formatDuration = (ms: number) => {
+    if (ms <= 0) return "00:00:00";
+    const totalSeconds = Math.floor(ms / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    const hh = String(hours).padStart(2, '0');
+    const mm = String(minutes).padStart(2, '0');
+    const ss = String(seconds).padStart(2, '0');
+    return days > 0 ? `${days} hari ${hh}:${mm}:${ss}` : `${hh}:${mm}:${ss}`;
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'Notification' in window) {
+      setNotifPermission(Notification.permission);
+    }
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const clearTimers = () => {
+      timeoutsRef.current.forEach((t) => clearTimeout(t));
+      timeoutsRef.current = [];
+    };
+
     const fetchProgress = async () => {
       const {
         data: { user },
@@ -65,27 +104,86 @@ export function DashboardContent({ user }: DashboardContentProps) {
 
       const { data: progress } = await supabase
         .from("user_progress")
-        .select("stage_id")
-        .eq("user_id", user.id)
-        .eq("completed", true);
+        .select("stage_id, completed, available_at")
+        .eq("user_id", user.id);
 
       if (progress) {
-        setCompletedStages(progress.map((p) => p.stage_id));
+        const map: Record<string, { completed: boolean; available_at?: string }> = {};
+        progress.forEach((p: any) => {
+          map[p.stage_id] = { completed: !!p.completed, available_at: p.available_at || undefined };
+        });
+
+        if (!cancelled) {
+          setStageProgress(map);
+          setCompletedStages(Object.entries(map).filter(([, v]) => v.completed).map(([k]) => k));
+          setIsLoading(false);
+        }
+
+        // schedule notifications for upcoming available_at
+        clearTimers();
+        for (const [stageId, info] of Object.entries(map)) {
+          if (info.available_at) {
+            const ms = new Date(info.available_at).getTime() - Date.now();
+            if (ms > 0) {
+              const t = window.setTimeout(async () => {
+                // Also show a system/browser notification if permission granted
+                notifyUser("Edukasi Tersedia", {
+                  body: `${stageId.replace("-", " ")} sekarang dapat diakses.`,
+                });
+
+                toast({
+                  title: `Edukasi Tersedia`,
+                  description: `${stageId.replace("-", " ")} sekarang dapat diakses.`,
+                });
+
+                // refetch to update UI
+                await fetchProgress();
+              }, ms);
+              timeoutsRef.current.push(t);
+            }
+          }
+        }
       }
-      setIsLoading(false);
     };
 
+    // ask permission if not decided yet when we mount (but do it unobtrusively)
+    if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'default') {
+      // don't block - show a small toast prompting user to enable notifications
+      toast({
+        title: 'Aktifkan Notifikasi',
+        description: 'Aktifkan notifikasi untuk menerima pemberitahuan ketika tahap baru tersedia.',
+      });
+    }
+
     fetchProgress();
-  }, [supabase]);
+
+    return () => {
+      cancelled = true;
+      clearTimers();
+    };
+  }, [supabase, toast]);
 
   // Define stage IDs first to avoid initialization issues
   const stageIds = ["pretest", "education-1", "education-2", "education-3", "tanya-ahli", "postest"];
 
+  // For some stages (e.g., postest) the required previous stage is not simply the immediate previous
+  const requiredPrev: Record<string, string | null> = {
+    pretest: null,
+    "education-1": "pretest",
+    "education-2": "education-1",
+    "education-3": "education-2",
+    "tanya-ahli": "education-3",
+    postest: "education-3", // allow skipping tanya-ahli (optional)
+  };
+
   const getStageStatus = (stageId: string, index: number): StageStatus => {
     if (completedStages.includes(stageId)) return "completed";
-    if (index === 0 || completedStages.includes(stageIds[index - 1])) {
-      return "available";
-    }
+    const reqPrev = requiredPrev[stageId] ?? (index === 0 ? null : stageIds[index - 1]);
+    const prevCompleted = reqPrev === null || completedStages.includes(reqPrev);
+    if (!prevCompleted) return "locked";
+    const info = stageProgress[stageId];
+    if (!info || !info.available_at) return "available";
+    if (new Date(info.available_at) <= new Date()) return "available";
     return "locked";
   };
 
@@ -121,10 +219,11 @@ export function DashboardContent({ user }: DashboardContentProps) {
     {
       id: "tanya-ahli",
       title: "Tanya Ahli",
-      description: "Ajukan pertanyaan Anda kepada para ahli kesehatan",
+      description: "Ajukan pertanyaan Anda kepada para ahli kesehatan (Opsional)",
       icon: <MessageSquare className="h-6 w-6" />,
       status: getStageStatus("tanya-ahli", 4),
     },
+
     {
       id: "postest",
       title: "Post-Test",
@@ -145,6 +244,15 @@ export function DashboardContent({ user }: DashboardContentProps) {
     );
   }
 
+  const enableNotifications = async () => {
+    const p = await requestNotificationPermission();
+    setNotifPermission(p);
+    if (p === 'granted') {
+      toast({ title: 'Notifikasi Diaktifkan', description: 'Anda akan menerima notifikasi ketika tahap baru tersedia.' });
+    } else {
+      toast({ title: 'Notifikasi Tidak Diaktifkan', description: 'Izin notifikasi ditolak atau tidak tersedia.', variant: 'destructive' });
+    }
+  };
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.push("/auth/login");
@@ -277,6 +385,13 @@ export function DashboardContent({ user }: DashboardContentProps) {
                 <span className="hidden sm:inline">Edit Profil</span>
               </Button>
             </Link> */}
+            {notifPermission !== 'granted' && notifPermission !== 'unsupported' && (
+              <Button variant="outline" size="sm" onClick={enableNotifications} className="flex items-center gap-2 bg-transparent">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h11z"/></svg>
+                <span className="hidden sm:inline">Aktifkan Notifikasi</span>
+              </Button>
+            )}
+
             <Button
               variant="outline"
               size="sm"
@@ -344,7 +459,10 @@ export function DashboardContent({ user }: DashboardContentProps) {
           <h2 className="text-xl font-semibold text-foreground mb-4 animate-fadeInUp delay-300">
             Tahap Pembelajaran
           </h2>
-          {stages.map((stage, index) => (
+          {stages.map((stage, index) => {
+            const availAt = stageProgress[stage.id]?.available_at;
+            const timeLeft = availAt ? new Date(availAt).getTime() - now : 0;
+            return (
             <Card
               key={stage.id}
               className={`${getCardClasses(stage.status)} animate-fadeInUp transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1`}
@@ -381,11 +499,28 @@ export function DashboardContent({ user }: DashboardContentProps) {
                           Selesai
                         </span>
                       )}
+                      {stage.id === "tanya-ahli" && stage.status !== "completed" && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className="text-xs bg-muted/10 text-muted-foreground px-2 py-0.5 rounded-full animate-fadeInUp ml-2 cursor-help">
+                              Opsional
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipContent side="top" align="center">
+                            Tanya Ahli bersifat opsional — Anda dapat langsung melanjutkan ke Post-Test setelah Edukasi 3.
+                          </TooltipContent>
+                        </Tooltip>
+                      )}
                     </div>
                     <h3 className="font-semibold text-card-foreground">{stage.title}</h3>
                     <p className="text-sm text-muted-foreground mt-1">
                       {stage.description}
                     </p>
+                    {stage.status === "locked" && availAt && timeLeft > 0 && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Tersedia dalam {formatDuration(timeLeft)} (pada {new Date(availAt).toLocaleString()})
+                      </p>
+                    )}
                   </div>
                   <div className="flex-shrink-0 transition-transform duration-300">
                     {getStatusIcon(stage.status)}
@@ -393,7 +528,7 @@ export function DashboardContent({ user }: DashboardContentProps) {
                 </div>
               </CardContent>
             </Card>
-          ))}
+          )})}
         </div>
       </main>
     </div>

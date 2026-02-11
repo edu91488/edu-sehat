@@ -332,7 +332,7 @@ export default function EditProfilePage() {
             <div>
               <p className="text-muted-foreground mb-1">User ID</p>
               <p className="font-mono text-xs bg-muted p-2 rounded break-all">
-                {userId}
+                {userId}-
               </p>
             </div>
             <div>

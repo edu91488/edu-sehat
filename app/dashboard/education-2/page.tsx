@@ -131,7 +131,9 @@ export default function Education2Page() {
         return;
       }
 
-      // Create education-3 stage if not exists
+      const unlockAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+
+      // Create or update education-3 stage with delayed availability
       const { data: existingEdu3 } = await supabase
         .from("user_progress")
         .select("id")
@@ -146,13 +148,24 @@ export default function Education2Page() {
             user_id: user.id,
             stage_id: "education-3",
             completed: false,
+            available_at: unlockAt,
           });
+      } else {
+        await supabase
+          .from("user_progress")
+          .update({
+            completed: false,
+            available_at: unlockAt,
+          })
+          .eq("id", existingEdu3.id);
       }
 
       toast({
-        title: "Success",
-        description: "Edukasi 2 selesai! Tahap berikutnya telah dibuka.",
+        title: "Edukasi 2 Selesai",
+        description: "Edukasi 3 akan tersedia dalam 7 hari.",
       });
+
+      // notification handled by background job and UI countdown — no in-session timeout for long delays
 
       setTimeout(() => {
         router.push("/dashboard");

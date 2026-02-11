@@ -23,6 +23,7 @@ import { HeartPulse, Loader2 } from "lucide-react";
 export default function RegisterPage() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -53,6 +54,7 @@ export default function RegisterPage() {
       options: {
         data: {
           full_name: fullName,
+          phone_number: phoneNumber || null,
         },
       },
     });
@@ -121,6 +123,19 @@ export default function RegisterPage() {
                   required
                   disabled={isLoading}
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="phoneNumber">Nomor WhatsApp</Label>
+                <Input
+                  id="phoneNumber"
+                  type="tel"
+                  placeholder="Contoh: +62812345678 atau 08123456789"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  disabled={isLoading}
+                />
+                <p className="text-xs text-muted-foreground">Nomor WhatsApp akan digunakan untuk komunikasi terkait edukasi dan konfirmasi.</p>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
