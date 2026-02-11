@@ -324,7 +324,7 @@ export default function EditProfilePage() {
         </Card>
 
         {/* Info Card */}
-        <Card className="mt-6">
+        {/* <Card className="mt-6">
           <CardHeader>
             <CardTitle className="text-base">Informasi Akun</CardTitle>
           </CardHeader>
@@ -340,7 +340,7 @@ export default function EditProfilePage() {
               <p className="text-muted-foreground">{originalData.email || "-"}</p>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
       </main>
     </div>
   );
