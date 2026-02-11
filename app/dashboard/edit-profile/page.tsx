@@ -169,7 +169,6 @@ export default function EditProfilePage() {
 
   const hasChanges =
     formData.fullName !== originalData.fullName ||
-    formData.email !== originalData.email ||
     formData.username !== originalData.username ||
     formData.phoneNumber !== originalData.phoneNumber;
 
@@ -257,7 +256,7 @@ export default function EditProfilePage() {
                   placeholder="Masukkan alamat email Anda"
                   value={formData.email}
                   onChange={handleInputChange}
-                  disabled={isSaving}
+                  disabled={true}
                   className="bg-background"
                 />
                 <p className="text-xs text-muted-foreground">
