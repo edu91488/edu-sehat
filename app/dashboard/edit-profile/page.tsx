@@ -260,7 +260,7 @@ export default function EditProfilePage() {
                   className="bg-background"
                 />
                 <p className="text-xs text-muted-foreground">
-                  Email Anda dari akun Supabase: {originalData.email || "-"}
+                  Email Anda: {originalData.email || "-"}
                 </p>
               </div>
 
