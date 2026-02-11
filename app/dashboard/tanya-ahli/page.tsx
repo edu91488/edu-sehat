@@ -46,6 +46,7 @@ export default function TanyaAhliPage() {
   const [userId, setUserId] = useState<string>("");
   const [userFullName, setUserFullName] = useState<string>("");
   const [isStageCompleted, setIsStageCompleted] = useState(false);
+  const [hasAskedQuestion, setHasAskedQuestion] = useState(false);
   const [experts, setExperts] = useState<Expert[]>([]);
 
   useEffect(() => {
@@ -285,6 +286,8 @@ export default function TanyaAhliPage() {
                               const encodedMessage = encodeURIComponent(message);
                               const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
                               window.open(whatsappUrl, '_blank');
+                              // Mark that user has asked a question
+                              setHasAskedQuestion(true);
                               // Complete the stage when user clicks to ask
                               completeStage();
                             }}
@@ -304,7 +307,7 @@ export default function TanyaAhliPage() {
         )}
 
         {/* Completion Status */}
-        {isStageCompleted && (
+        {isStageCompleted && hasAskedQuestion && (
           <Card className="mb-8 border-green-500 bg-green-500/5">
             <CardContent className="pt-6">
               <div className="flex items-center gap-3">
