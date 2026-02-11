@@ -4,6 +4,7 @@ import React from "react"
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,6 +26,8 @@ import {
   ChevronRight,
   User,
   Loader2,
+  MessageSquare,
+  Settings,
 } from "lucide-react";
 
 interface DashboardContentProps {
@@ -76,7 +79,7 @@ export function DashboardContent({ user }: DashboardContentProps) {
   }, [supabase]);
 
   // Define stage IDs first to avoid initialization issues
-  const stageIds = ["pretest", "education-1", "education-2", "education-3", "postest"];
+  const stageIds = ["pretest", "education-1", "education-2", "education-3", "tanya-ahli", "postest"];
 
   const getStageStatus = (stageId: string, index: number): StageStatus => {
     if (completedStages.includes(stageId)) return "completed";
@@ -116,11 +119,18 @@ export function DashboardContent({ user }: DashboardContentProps) {
       status: getStageStatus("education-3", 3),
     },
     {
+      id: "tanya-ahli",
+      title: "Tanya Ahli",
+      description: "Ajukan pertanyaan Anda kepada para ahli kesehatan",
+      icon: <MessageSquare className="h-6 w-6" />,
+      status: getStageStatus("tanya-ahli", 4),
+    },
+    {
       id: "postest",
       title: "Post-Test",
       description: "Evaluasi pemahaman setelah menyelesaikan semua materi",
       icon: <GraduationCap className="h-6 w-6" />,
-      status: getStageStatus("postest", 4),
+      status: getStageStatus("postest", 5),
     },
   ];
 
@@ -244,15 +254,29 @@ export function DashboardContent({ user }: DashboardContentProps) {
       {/* Header */}
       <header className="sticky top-0 z-50 bg-card border-b border-border shadow-sm animate-fadeInDown">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <HeartPulse className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold text-foreground">EduSehat</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground">
-              <User className="h-4 w-4" />
-              <span>{user.fullName}</span>
+          
+            <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
+              <HeartPulse className="h-8 w-8 text-primary" />
+              <span className="text-xl font-bold text-foreground">EduSehat</span>
             </div>
+          
+          <div className="flex items-center gap-4">
+            <Link href="/dashboard/edit-profile">
+              <div className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
+                <User className="h-4 w-4" />
+                <span>{user.fullName}</span>
+              </div>
+            </Link>
+            {/* <Link href="/dashboard/edit-profile">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2 bg-transparent"
+              >
+                <Settings className="h-4 w-4" />
+                <span className="hidden sm:inline">Edit Profil</span>
+              </Button>
+            </Link> */}
             <Button
               variant="outline"
               size="sm"

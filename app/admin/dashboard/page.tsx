@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
@@ -133,7 +134,7 @@ export default function AdminDashboardPage() {
         // Get monitoring responses
         const { data: monitoringResponses, error: monitoringError } = await supabase
           .from("monitoring_responses")
-          .select("user_id, education_stage, completed_at")
+          .select("id, user_id, education_stage, completed_at")
           .order("completed_at", { ascending: false });
 
         if (monitoringError) throw monitoringError;
@@ -157,7 +158,7 @@ export default function AdminDashboardPage() {
           const user = userMap.get(m.user_id);
           if (user) {
             monitoring.push({
-              id: `${m.user_id}-${m.education_stage}`,
+              id: m.id,
               user_id: m.user_id,
               email: user.email,
               full_name: user.full_name,
@@ -254,31 +255,28 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-card border-b border-border shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <HeartPulse className="h-8 w-8 text-primary" />
-            <div>
-              <span className="text-xl font-bold text-foreground">EduSehat</span>
-              <p className="text-xs text-muted-foreground">Admin Panel</p>
-            </div>
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleLogout}
-            className="flex items-center gap-2"
-          >
-            <LogOut className="h-4 w-4" />
-            Logout
-          </Button>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background flex">
+      {/* Sidebar */}
+      <AdminSidebar onLogout={handleLogout} />
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <header className="sticky top-0 z-40 bg-card border-b border-border shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <HeartPulse className="h-8 w-8 text-primary" />
+              <div>
+                <span className="text-xl font-bold text-foreground">EduSehat</span>
+                <p className="text-xs text-muted-foreground">Admin Panel</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Page Content */}
+        <main className="flex-1 overflow-y-auto">
+          <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Title */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">Dashboard Laporan</h1>
@@ -499,7 +497,9 @@ export default function AdminDashboardPage() {
             </Card>
           </TabsContent>
         </Tabs>
-      </main>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }
