@@ -326,7 +326,7 @@ export default function TanyaAhliPage() {
         )}
 
         {/* Navigation Button */}
-        <div className="flex gap-3">
+        {/* <div className="flex gap-3">
           <Link href="/dashboard" className="flex-1">
             <Button variant="outline" className="w-full">
               Kembali ke Dashboard
@@ -338,7 +338,7 @@ export default function TanyaAhliPage() {
               <Send className="h-4 w-4" />
             </Button>
           </Link>
-        </div>
+        </div> */}
       </main>
     </div>
   );
