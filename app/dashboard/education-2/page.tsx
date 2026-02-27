@@ -131,7 +131,7 @@ export default function Education2Page() {
         return;
       }
 
-      const unlockAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+      const unlockAt = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString();
 
       // Create or update education-3 stage with delayed availability
       const { data: existingEdu3 } = await supabase
@@ -162,7 +162,7 @@ export default function Education2Page() {
 
       toast({
         title: "Edukasi 2 Selesai",
-        description: "Edukasi 3 akan tersedia dalam 7 hari.",
+        description: "Edukasi 3 akan tersedia dalam 3 hari.",
       });
 
       // notification handled by background job and UI countdown — no in-session timeout for long delays
