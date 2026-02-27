@@ -305,7 +305,7 @@ export default function AdminExpertsPage() {
             <div className="flex items-center gap-2">
               <HeartPulse className="h-8 w-8 text-primary" />
               <div>
-                <span className="text-xl font-bold text-foreground">EduSehat</span>
+                <span className="text-xl font-bold text-foreground">MedTensi</span>
                 <p className="text-xs text-muted-foreground">Admin Panel</p>
               </div>
             </div>

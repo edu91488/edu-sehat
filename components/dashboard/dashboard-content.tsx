@@ -365,7 +365,7 @@ export function DashboardContent({ user }: DashboardContentProps) {
           
             <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
               <HeartPulse className="h-8 w-8 text-primary" />
-              <span className="text-xl font-bold text-foreground">EduSehat</span>
+              <span className="text-xl font-bold text-foreground">MedTensi</span>
             </div>
           
           <div className="flex items-center gap-4">

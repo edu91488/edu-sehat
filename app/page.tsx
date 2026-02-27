@@ -104,7 +104,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between animate-fadeInDown">
           <div className="flex items-center gap-2">
             <HeartPulse className="h-8 w-8 text-primary animate-pulse-scale" />
-            <span className="text-xl font-bold text-foreground">EduSehat</span>
+            <span className="text-xl font-bold text-foreground">MedTensi</span>
           </div>
           <div className="flex items-center gap-3">
             <Button variant="ghost" asChild>
@@ -183,7 +183,7 @@ mengontrol hipertensi melalui modul
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <HeartPulse className="h-6 w-6 text-primary animate-float" />
-            <span className="font-semibold text-foreground">EduSehat</span>
+            <span className="font-semibold text-foreground">MedTensi</span>
           </div>
           <p className="text-sm text-muted-foreground">
             Platform Edukasi Kesehatan Indonesia

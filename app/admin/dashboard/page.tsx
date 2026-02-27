@@ -116,7 +116,7 @@ export default function AdminDashboardPage() {
           if (profilesWithoutEmail) {
             profilesWithoutEmail.forEach(profile => {
               userMap.set(profile.id, {
-                email: `${profile.username}@eduseat.com`,
+                email: `${profile.username}@medtensi.com`,
                 full_name: profile.username || "Unknown",
               });
             });
@@ -125,7 +125,7 @@ export default function AdminDashboardPage() {
           // Create user map dari profiles
           profiles?.forEach(profile => {
             userMap.set(profile.id, {
-              email: profile.email || `${profile.username}@eduseat.com`,
+              email: profile.email || `${profile.username}@medtensi.com`,
               full_name: profile.username || "Unknown",
             });
           });
@@ -267,7 +267,7 @@ export default function AdminDashboardPage() {
             <div className="flex items-center gap-2">
               <HeartPulse className="h-8 w-8 text-primary" />
               <div>
-                <span className="text-xl font-bold text-foreground">EduSehat</span>
+                <span className="text-xl font-bold text-foreground">MedTensi</span>
                 <p className="text-xs text-muted-foreground">Admin Panel</p>
               </div>
             </div>

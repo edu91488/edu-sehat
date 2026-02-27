@@ -16,7 +16,7 @@ export default function AdminLoginPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   // Kredensial admin (bisa diganti dengan logic yang lebih kompleks)
-  const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || "admin@eduseat.com";
+  const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || "admin@medtensi.com";
   const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "admin123";
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -64,7 +64,7 @@ export default function AdminLoginPage() {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-2">
             <HeartPulse className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold text-foreground">EduSehat</span>
+            <span className="text-2xl font-bold text-foreground">MedTensi</span>
           </div>
           <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
             <Shield className="h-4 w-4" />
@@ -90,7 +90,7 @@ export default function AdminLoginPage() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@eduseat.com"
+                  placeholder="admin@medtensi.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isLoading}
@@ -133,7 +133,7 @@ export default function AdminLoginPage() {
             <div className="mt-6 p-3 bg-blue-50 rounded-lg border border-blue-200">
               <p className="text-xs text-blue-800 font-semibold mb-2">📝 Demo Credentials:</p>
               <p className="text-xs text-blue-700">
-                Email: <code className="bg-white px-1 rounded">admin@eduseat.com</code>
+                Email: <code className="bg-white px-1 rounded">admin@medtensi.com</code>
               </p>
               <p className="text-xs text-blue-700">
                 Password: <code className="bg-white px-1 rounded">admin123</code>
