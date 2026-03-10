@@ -8,7 +8,7 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'MedTensi - Platform Edukasi Kesehatan Indonesia',
+  title: 'EduSehat - Platform Edukasi Kesehatan Indonesia',
   description: 'Tingkatkan pengetahuan kesehatan Anda melalui modul pembelajaran interaktif tentang gaya hidup sehat, nutrisi, dan kesehatan mental.',
   generator: 'v0.app',
   icons: {

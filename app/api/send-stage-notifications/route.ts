@@ -56,7 +56,7 @@ export async function POST() {
       }
 
       const subject = `Edukasi Tersedia: ${r.stage_id.replace('-', ' ')}`
-      const text = `Halo,\n\nEdukasi ${r.stage_id.replace('-', ' ')} sekarang dapat diakses. Silakan masuk ke aplikasi untuk melanjutkan pembelajaran.\n\nSalam,\nTim MedTensi`
+      const text = `Halo,\n\nEdukasi ${r.stage_id.replace('-', ' ')} sekarang dapat diakses. Silakan masuk ke aplikasi untuk melanjutkan pembelajaran.\n\nSalam,\nTim EduSehat`
 
       try {
         if (!process.env.SMTP_HOST) {

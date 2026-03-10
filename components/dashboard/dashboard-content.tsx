@@ -176,11 +176,21 @@ export function DashboardContent({ user }: DashboardContentProps) {
     postest: "education-3", // allow skipping tanya-ahli (optional)
   };
 
+  // flag controlled by environment so we can temporarily bypass the interval during testing
+  // also automatically disable in development mode for easier local testing
+  const delayDisabled =
+    process.env.NEXT_PUBLIC_DISABLE_EDU_DELAY === 'true' ||
+    process.env.NODE_ENV === 'development';
+
   const getStageStatus = (stageId: string, index: number): StageStatus => {
     if (completedStages.includes(stageId)) return "completed";
     const reqPrev = requiredPrev[stageId] ?? (index === 0 ? null : stageIds[index - 1]);
     const prevCompleted = reqPrev === null || completedStages.includes(reqPrev);
     if (!prevCompleted) return "locked";
+    if (delayDisabled) {
+      // ignore any available_at timestamps when bypass is active
+      return "available";
+    }
     const info = stageProgress[stageId];
     if (!info || !info.available_at) return "available";
     if (new Date(info.available_at) <= new Date()) return "available";
@@ -365,7 +375,7 @@ export function DashboardContent({ user }: DashboardContentProps) {
           
             <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
               <HeartPulse className="h-8 w-8 text-primary" />
-              <span className="text-xl font-bold text-foreground">MedTensi</span>
+              <span className="text-xl font-bold text-foreground">EduSehat</span>
             </div>
           
           <div className="flex items-center gap-4">
@@ -516,7 +526,7 @@ export function DashboardContent({ user }: DashboardContentProps) {
                     <p className="text-sm text-muted-foreground mt-1">
                       {stage.description}
                     </p>
-                    {stage.status === "locked" && availAt && timeLeft > 0 && (
+                    {stage.status === "locked" && availAt && timeLeft > 0 && !delayDisabled && (
                       <p className="text-xs text-muted-foreground mt-1">
                         Tersedia dalam {formatDuration(timeLeft)} (pada {new Date(availAt).toLocaleString()})
                       </p>

@@ -130,7 +130,13 @@ export default function Education1Page() {
         return;
       }
 
-      const unlockAt = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString();
+      // disable the artificial wait when developing locally or when env flag is set
+      const delayDisabled =
+        process.env.NEXT_PUBLIC_DISABLE_EDU_DELAY === 'true' ||
+        process.env.NODE_ENV === 'development';
+      const unlockAt = delayDisabled
+        ? new Date().toISOString()
+        : new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString();
 
       const { data: existingEdu2 } = await supabase
         .from("user_progress")
@@ -160,7 +166,9 @@ export default function Education1Page() {
 
       toast({
         title: "Edukasi 1 Selesai",
-        description: "Edukasi 2 akan tersedia dalam 3 hari.",
+        description: delayDisabled
+          ? "Edukasi 2 tersedia segera."
+          : "Edukasi 2 akan tersedia dalam 3 hari.",
       });
 
       // notification handled by background job and UI countdown — no in-session timeout for long delays

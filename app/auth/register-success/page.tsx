@@ -17,7 +17,7 @@ export default function RegisterSuccessPage() {
         <div className="flex flex-col items-center mb-8">
           <div className="flex items-center gap-2 mb-2">
             <HeartPulse className="h-10 w-10 text-primary" />
-            <span className="text-2xl font-bold text-foreground">MedTensi</span>
+            <span className="text-2xl font-bold text-foreground">EduSehat</span>
           </div>
         </div>
 
