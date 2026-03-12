@@ -131,13 +131,8 @@ export default function Education2Page() {
         return;
       }
 
-      // disable the artificial wait when developing locally or when env flag is set
-      const delayDisabled =
-        process.env.NEXT_PUBLIC_DISABLE_EDU_DELAY === 'true' ||
-        process.env.NODE_ENV === 'development';
-      const unlockAt = delayDisabled
-        ? new Date().toISOString()
-        : new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString();
+      // no artificial delay: next stage becomes available immediately
+      const unlockAt = new Date().toISOString();
 
       // Create or update education-3 stage with delayed availability
       const { data: existingEdu3 } = await supabase
@@ -168,9 +163,7 @@ export default function Education2Page() {
 
       toast({
         title: "Edukasi 2 Selesai",
-        description: delayDisabled
-          ? "Edukasi 3 tersedia segera."
-          : "Edukasi 3 akan tersedia dalam 3 hari.",
+        description: "Edukasi 3 tersedia segera.",
       });
 
       // return to dashboard after a brief pause
