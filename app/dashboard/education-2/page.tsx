@@ -173,8 +173,7 @@ export default function Education2Page() {
           : "Edukasi 3 akan tersedia dalam 3 hari.",
       });
 
-      // notification handled by background job and UI countdown — no in-session timeout for long delays
-
+      // return to dashboard after a brief pause
       setTimeout(() => {
         router.push("/dashboard");
       }, 1000);

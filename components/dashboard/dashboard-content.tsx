@@ -243,8 +243,10 @@ export function DashboardContent({ user }: DashboardContentProps) {
     },
   ];
 
-  const completedCount = completedStages.length;
-  const progressPercentage = (completedCount / stages.length) * 100;
+  // when computing overall progress we don't want to count the optional "tanya-ahli" stage
+  const completedCount = completedStages.filter((id) => id !== "tanya-ahli").length;
+  const totalCount = stages.filter((s) => s.id !== "tanya-ahli").length;
+  const progressPercentage = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
 
   if (isLoading) {
     return (
