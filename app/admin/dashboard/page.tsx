@@ -116,7 +116,7 @@ export default function AdminDashboardPage() {
           if (profilesWithoutEmail) {
             profilesWithoutEmail.forEach(profile => {
               userMap.set(profile.id, {
-                email: `${profile.username}@edusehat.com`,
+                email: profile.username ? `${profile.username}@gmail.com` : "Unknown",
                 full_name: profile.username || "Unknown",
               });
             });
@@ -125,7 +125,7 @@ export default function AdminDashboardPage() {
           // Create user map dari profiles
           profiles?.forEach(profile => {
             userMap.set(profile.id, {
-              email: profile.email || `${profile.username}@edusehat.com`,
+              email: profile.email || (profile.username ? `${profile.username}@gmail.com` : "Unknown"),
               full_name: profile.username || "Unknown",
             });
           });
@@ -390,7 +390,7 @@ export default function AdminDashboardPage() {
                             <TableRow key={item.id}>
                               <TableCell className="font-medium">{index + 1}</TableCell>
                               <TableCell>{item.full_name}</TableCell>
-                              <TableCell className="text-sm">{item.email}</TableCell>
+                              <TableCell className="text-sm">{item.email || "-"}</TableCell>
                               <TableCell>
                                 <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
                                   {item.stage_title}
@@ -462,7 +462,7 @@ export default function AdminDashboardPage() {
                       <TableBody>
                         {commitmentData.length > 0 ? (
                           commitmentData.map((item, index) => (
-                            <TableRow key={item.id}>
+                            <TableRow key={`${item.user_id}-${index}`}>
                               <TableCell className="font-medium">{index + 1}</TableCell>
                               <TableCell>{item.full_name}</TableCell>
                               <TableCell className="text-sm">{item.email}</TableCell>
