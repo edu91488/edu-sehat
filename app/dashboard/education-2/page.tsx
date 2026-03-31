@@ -131,8 +131,9 @@ export default function Education2Page() {
         return;
       }
 
-      // no artificial delay: next stage becomes available immediately
-      const unlockAt = new Date().toISOString();
+      // atur delay 3 hari sebelum Edukasi 3 tersedia
+      const delayMs = 3 * 24 * 60 * 60 * 1000;
+      const unlockAt = new Date(Date.now() + delayMs).toISOString();
 
       // Create or update education-3 stage with delayed availability
       const { data: existingEdu3 } = await supabase
@@ -163,7 +164,7 @@ export default function Education2Page() {
 
       toast({
         title: "Edukasi 2 Selesai",
-        description: "Edukasi 3 tersedia segera.",
+        description: "Edukasi 3 akan tersedia dalam 3 hari.",
       });
 
       // return to dashboard after a brief pause

@@ -130,9 +130,9 @@ export default function Education1Page() {
         return;
       }
 
-      // disable the artificial wait when developing locally or when env flag is set
-      // no artificial delay: next stage becomes available immediately
-      const unlockAt = new Date().toISOString();
+      // atur delay 3 hari sebelum Edukasi 2 tersedia
+      const delayMs = 3 * 24 * 60 * 60 * 1000;
+      const unlockAt = new Date(Date.now() + delayMs).toISOString();
 
       const { data: existingEdu2 } = await supabase
         .from("user_progress")
@@ -162,7 +162,7 @@ export default function Education1Page() {
 
       toast({
         title: "Edukasi 1 Selesai",
-        description: "Edukasi 2 tersedia segera.",
+        description: "Edukasi 2 akan tersedia dalam 3 hari.",
       });
 
       // return to dashboard after a brief pause

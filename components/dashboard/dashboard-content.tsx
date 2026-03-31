@@ -176,16 +176,18 @@ export function DashboardContent({ user }: DashboardContentProps) {
     postest: "education-3", // allow skipping tanya-ahli (optional)
   };
 
-  // delays are no longer used; everything becomes available once the prior stage is completed
-  const delayDisabled = true; // kept for backward compatibility but always true
+  const delayDisabled = process.env.NEXT_PUBLIC_DISABLE_EDU_DELAY === 'true';
 
   const getStageStatus = (stageId: string, index: number): StageStatus => {
     if (completedStages.includes(stageId)) return "completed";
     const reqPrev = requiredPrev[stageId] ?? (index === 0 ? null : stageIds[index - 1]);
     const prevCompleted = reqPrev === null || completedStages.includes(reqPrev);
     if (!prevCompleted) return "locked";
-    // always available as soon as previous requirement is met
-    return "available";
+    if (delayDisabled) return "available";
+    const info = stageProgress[stageId];
+    if (!info || !info.available_at) return "available";
+    if (new Date(info.available_at) <= new Date()) return "available";
+    return "locked";
   };
 
   const stages: LearningStage[] = [
@@ -519,7 +521,11 @@ export function DashboardContent({ user }: DashboardContentProps) {
                     <p className="text-sm text-muted-foreground mt-1">
                       {stage.description}
                     </p>
-                    {/* countdown removed; stages are instantly available */}
+                    {stage.status === "locked" && availAt && timeLeft > 0 && !delayDisabled && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Tersedia dalam {formatDuration(timeLeft)} (pada {new Date(availAt).toLocaleString()})
+                      </p>
+                    )}
                   </div>
                   <div className="flex-shrink-0 transition-transform duration-300">
                     {getStatusIcon(stage.status)}
