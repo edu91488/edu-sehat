@@ -131,8 +131,8 @@ export default function Education2Page() {
         return;
       }
 
-      // atur delay 3 hari sebelum Edukasi 3 tersedia
-      const delayMs = 3 * 24 * 60 * 60 * 1000;
+      // atur delay 2 hari sebelum Edukasi 3 tersedia
+      const delayMs = 2 * 24 * 60 * 60 * 1000;
       const unlockAt = new Date(Date.now() + delayMs).toISOString();
 
       // Create or update education-3 stage with delayed availability
@@ -164,7 +164,7 @@ export default function Education2Page() {
 
       toast({
         title: "Edukasi 2 Selesai",
-        description: "Edukasi 3 akan tersedia dalam 3 hari.",
+        description: "Edukasi 3 akan tersedia dalam 2 hari.",
       });
 
       // return to dashboard after a brief pause

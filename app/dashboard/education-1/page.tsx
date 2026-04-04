@@ -130,8 +130,8 @@ export default function Education1Page() {
         return;
       }
 
-      // atur delay 3 hari sebelum Edukasi 2 tersedia
-      const delayMs = 3 * 24 * 60 * 60 * 1000;
+      // atur delay 2 hari sebelum Edukasi 2 tersedia
+      const delayMs = 2 * 24 * 60 * 60 * 1000;
       const unlockAt = new Date(Date.now() + delayMs).toISOString();
 
       const { data: existingEdu2 } = await supabase
@@ -162,7 +162,7 @@ export default function Education1Page() {
 
       toast({
         title: "Edukasi 1 Selesai",
-        description: "Edukasi 2 akan tersedia dalam 3 hari.",
+        description: "Edukasi 2 akan tersedia dalam 2 hari.",
       });
 
       // return to dashboard after a brief pause
