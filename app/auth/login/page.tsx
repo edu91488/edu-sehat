@@ -120,15 +120,25 @@ export default function LoginPage() {
                   "Masuk"
                 )}
               </Button>
-              <p className="text-sm text-muted-foreground text-center">
-                Belum punya akun?{" "}
-                <Link
-                  href="/auth/register"
-                  className="text-primary hover:underline font-medium"
-                >
-                  Daftar sekarang
-                </Link>
-              </p>
+              <div className="space-y-2 text-center text-sm text-muted-foreground">
+                <p>
+                  Belum punya akun?{" "}
+                  <Link
+                    href="/auth/register"
+                    className="text-primary hover:underline font-medium"
+                  >
+                    Daftar sekarang
+                  </Link>
+                </p>
+                <p>
+                  <Link
+                    href="/auth/forgot-password"
+                    className="text-primary hover:underline font-medium"
+                  >
+                    Lupa password?
+                  </Link>
+                </p>
+              </div>
             </CardFooter>
           </form>
         </Card>
